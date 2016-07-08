@@ -1,0 +1,66 @@
+version: "2"
+services:
+
+  postgres:
+    image: postgres:9.2
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=TCrGaanoC2s7gT
+
+  zookeeper:
+    container_name: zookeeper
+    image: znly/zookeeper:3.4.8
+    environment:
+      - ZOO_ID=1
+      - ZOO_SERVERS=zookeeper
+
+  overlord:
+    image: znly/druid:0.9.1.1
+    environment:
+      - DRUID_XMX=1g 
+      - DRUID_XMS=1g 
+      - DRUID_MAXNEWSIZE=250m 
+      - DRUID_NEWSIZE=250m
+    command:
+      - overlord
+
+  coordinator:
+    image: znly/druid:0.9.1.1
+    environment:
+      - DRUID_XMX=1g 
+      - DRUID_XMS=1g 
+      - DRUID_MAXNEWSIZE=250m 
+      - DRUID_NEWSIZE=250m
+    command:
+      - coordinator
+
+
+  middleManager:
+    image: znly/druid:0.9.1.1
+    environment:
+      - DRUID_XMX=1g 
+      - DRUID_XMS=1g 
+      - DRUID_MAXNEWSIZE=250m 
+      - DRUID_NEWSIZE=250m
+    command:
+      - middleManager
+
+  historical:
+    image: znly/druid:0.9.1.1
+    environment:
+      - DRUID_XMX=1g 
+      - DRUID_XMS=1g 
+      - DRUID_MAXNEWSIZE=250m 
+      - DRUID_NEWSIZE=250m
+    command:
+      - historical
+
+  broker:
+    image: znly/druid:0.9.1.1
+    environment:
+      - DRUID_XMX=1g 
+      - DRUID_XMS=1g 
+      - DRUID_MAXNEWSIZE=250m 
+      - DRUID_NEWSIZE=250m
+    command:
+      - broker
