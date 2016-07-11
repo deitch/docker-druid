@@ -11,7 +11,8 @@ ENV DRUID_XMX           '-'
 ENV DRUID_XMS           '-'
 ENV DRUID_NEWSIZE       '-'
 ENV DRUID_MAXNEWSIZE    '-'
-ENV DRUID_HOSTNAME 	    '-'
+ENV DRUID_HOSTNAME      '-'
+ENV DRUID_LOGLEVEL      '-'
 
 RUN opkg-install wget tar bash \
     && mkdir /tmp/druid
