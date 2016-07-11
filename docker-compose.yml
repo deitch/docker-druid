@@ -35,7 +35,7 @@ services:
       - coordinator
 
 
-  middleManager:
+  middlemanager:
     image: znly/druid:0.9.1.1
     environment:
       - DRUID_XMX=1g 
