@@ -17,7 +17,7 @@ ENV DRUID_LOGLEVEL      '-'
 
 RUN apk add --update wget tar bash
 
-RUN mkdir -p /opt/druid
+RUN mkdir -p /opt
 
 RUN wget -q --no-check-certificate --no-cookies -O - \
     http://static.druid.io/artifacts/releases/druid-$DRUID_VERSION-bin.tar.gz | tar -xzf - -C /opt \
