@@ -36,10 +36,14 @@ if [ "$DRUID_USE_CONTAINER_IP" != "-" ]; then
 fi
 
 # catch all environment vars that start with DRUID_ and set them to override druid.
-druidVars=$(env | awk -F= '/^DRUID_/ {
+ucDruidVars=$(env | awk -F= '/^DRUID_/ {
     gsub("_",".",$1)
     print "-D"tolower($1)"="$2
 }')
+lcDruidVars=$(env | awk -F= '/^druid_/ {
+    gsub("_",".",$1)
+    print "-D"$1"="$2
+}')
 
 
-java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` ${druidVars} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
+java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` ${ucDruidVars} ${lcDruidVars} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
