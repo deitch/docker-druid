@@ -14,6 +14,7 @@ ENV DRUID_NEWSIZE       '-'
 ENV DRUID_MAXNEWSIZE    '-'
 ENV DRUID_HOSTNAME      '-'
 ENV DRUID_LOGLEVEL      '-'
+ENV DRUID_USE_CONTAINER_IP '-'
 
 RUN apk add --update wget tar bash
 
