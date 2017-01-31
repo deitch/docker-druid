@@ -66,6 +66,11 @@ You can override *any* setting in `common.runtime.properties` and `runtime.prope
 
 For example, if you want to override the setting `druid.metadata.storage.connector.user` and set it to `DBUSER`, set the environment variable `DRUID_METADATA_STORAGE_CONNECTOR_USER=DBUSER`.
 
+If the `DRUID` at the beginning is not upper-cased, the case will be left alone. Thus:
+
+* `DRUID_METADATA_STORAGE_CONNECTOR_USER=DBUSER` will be converted to `druid.metadata.storage.connector.user=DBUSER`
+* `druid_metadata_storage_connector_connectURI=jdbc:postgresql://dbserver/db` will be converted to `druid.metadata.storage.connector.connectURI=jdbc:postgresql://dbserver/db`
+
 Authors
 =======
 
