@@ -63,6 +63,13 @@ Priority overrides: lowercase settings, e.g. `druid_host`, **always** override s
 
 Within the special variables, `DRUID_HOSTNAME` overrides `DRUID_USE_CONTAINER_IP`.
 
+
+## Logging
+Most of the services are configured to output logs directly to stdout, which lets docker logs and other reasonable container logging capture services to see them. The big exception is the indexer service, run by the middlemanager. It can write only to file, S3, Azure or Google Storage, not to stdout. [see](https://github.com/druid-io/druid/blob/4ca3b7f1e43245f59737756201d037c5b7d0e8a2/docs/content/configuration/indexing-service.md). 
+
+The indexer is configured by default to write inside the container to `/var/druid/indexing-logs/`. If you need to see the logs, either exec into the container, or volume mount that directory.
+
+
 ## Authors
 
 - Jean-Baptiste DALIDO <jb@zen.ly>
