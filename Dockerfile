@@ -27,6 +27,6 @@ RUN wget -q --no-check-certificate --no-cookies -O - \
 COPY conf /opt/druid-$DRUID_VERSION/conf
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 
-RUN mkdir -p /tmp/druid
+RUN mkdir -p /tmp/druid /var/druid/indexing-logs
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
