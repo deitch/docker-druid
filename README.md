@@ -44,11 +44,13 @@ If you plan to use this image on your local machine, be careful with the JVM hea
 
 ## Configuration
 
-You can override *any* setting in `common.runtime.properties` and `runtime.properties` by setting an environment variable that begins with `druid_` and matches the property name, with `.` replaced by `_`.
+You can override *any* property by setting an environment variable that begins with `property_`. The leading `property_` will be removed, the remaining `_` will be replaced by `.`, and the resultant value will be set as `-D` on the command-line.
 
-For example, if you want to override the setting `druid.metadata.storage.connector.user` and set it to `DBUSER`, set the environment variable `druid_metadata_storage_connector_user=DBUSER`. All case is respected.
+The most common use cases are for `druid.` properties.
 
-Thus `druid_metadata_storage_connector_connectURI=jdbc:postgresql://dbSErver/db` will be converted to `druid.metadata.storage.connector.connectURI=jdbc:postgresql://dbSErver/db`
+For example, if you want to override the setting `druid.metadata.storage.connector.user` and set it to `DBUSER`, set the environment variable `property_druid_metadata_storage_connector_user=DBUSER`. All case is respected.
+
+Thus `property_druid_metadata_storage_connector_connectURI=jdbc:postgresql://dbSErver/db` will be converted to `druid.metadata.storage.connector.connectURI=jdbc:postgresql://dbSErver/db`
 
 In addition, certain environment variables have special properties. If unset, they use the defaults configured in `./conf/druid/`. If set, they override the properties.
 
@@ -65,9 +67,9 @@ Priority overrides: lowercase settings, e.g. `druid_host`, **always** override s
 Within the special variables, `DRUID_HOSTNAME` overrides `DRUID_USE_CONTAINER_IP`.
 
 ### S3 Configuration
-Druid uses [jets3t](druid-s3-extensions) to store data segments in S3. These normally are configured by changing `jets3t.properties`. We enable override of any of the properties by setting an environment variable that begins with `s3_` followed by the name of the property, with `.` converted to `_`. The `s3_` prefix will be stripped off and all `_` converted to `.`.
+Druid uses [jets3t](druid-s3-extensions) to store data segments in S3. These normally are configured by changing `jets3t.properties`. You can override those properties using the `property_` environment variables described earlier. 
 
-For example, if you want to override `s3service.s3-endpoint` to be `my.region.service.com`, set `s3_s3service_s3-endpoint=my.region.service.com`.
+For example, if you want to override `s3service.s3-endpoint` to be `my.region.service.com`, set `property_s3service_s3-endpoint=my.region.service.com`.
 
 ## Extensions
 By default, the following druid extensions are enabled:
