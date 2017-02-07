@@ -35,6 +35,17 @@ if [ "$DRUID_HOSTNAME" != "-" ]; then
 fi
 
 
+if [[ -n "$DRUID_EXTENSIONS" ]]; then
+  finalList='"'$(echo $DRUID_EXTENSIONS | sed 's/,/", "/g' | sed 's/^+//g')'"'
+  confFile=/opt/druid/conf/druid/_common/common.runtime.properties
+  # did it start with + ?
+  if [[ $DRUID_EXTENSIONS == +* ]]; then
+    sed -i "s|\(druid.extensions.loadList=.*\)]|\1, ${finalList}]|g" $confFile
+  else
+    sed -i "s|\(druid.extensions.loadList=\).*|\1[${finalList}]|g" $confFile
+  fi
+fi
+
 # catch all environment vars that start with druid_ and set them to override druid.
 druidVars=$(env | awk -F= '/^druid_/ {
     gsub("_",".",$1)

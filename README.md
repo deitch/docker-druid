@@ -64,6 +64,39 @@ Priority overrides: lowercase settings, e.g. `druid_host`, **always** override s
 
 Within the special variables, `DRUID_HOSTNAME` overrides `DRUID_USE_CONTAINER_IP`.
 
+## Extensions
+By default, the following druid extensions are enabled:
+
+```
+["druid-histogram", "druid-datasketches", "postgresql-metadata-storage", "druid-kafka-indexing-service"]
+```
+
+If you wish to change which extensions are used, you can set the environment variable `DRUID_EXTENSIONS` as follows:
+
+* `extension1,extension2,extension3,...,extensionN`: **replace** the existing list with the ones in the environment variable.
+* `+extension1,extension2,extension3,...,extensionN`: **add** the ones in the environment variable to the ones in the default list, if the list starts with a `+` character.
+
+Note that we do _not_ use the normal path of `druid_extensions_loadList` to override the list for 2 reasons:
+
+1. Sometimes we want to _add_ instead of _replace_
+2. The format in the config normally includes quotes and spaces and `[]` characters, which can cause a problem in a shell when set on an environment variable.
+
+### Examples
+
+#### Replace
+
+1. The default list is `druid.extensions.loadList=["druid-histogram", "druid-datasketches", "postgresql-metadata-storage", "druid-kafka-indexing-service"]`.
+2. Set `DRUID_EXTENSIONS=druid-my-indexer-service,druid-s3-extensions`
+3. Final list is `druid.extensions.loadList=["druid-my-indexer-service", "druid-s3-extensions"]`. 
+
+#### Add
+
+1. The default list is `druid.extensions.loadList=["druid-histogram", "druid-datasketches", "postgresql-metadata-storage", "druid-kafka-indexing-service"]`.
+2. Set `DRUID_EXTENSIONS=+druid-my-indexer-service,druid-s3-extensions`
+3. Final list is `druid.extensions.loadList=["druid-histogram", "druid-datasketches", "postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-my-indexer-service", "druid-s3-extensions"]`.
+
+
+
 
 ## Logging
 Some of the services are configured to output logs directly to stdout, which lets docker logs and other reasonable container logging capture services to see them. The big exception is the indexer service, run by the middlemanager. It can write only to file, S3, Azure or Google Storage, not to stdout. [see](https://github.com/druid-io/druid/blob/4ca3b7f1e43245f59737756201d037c5b7d0e8a2/docs/content/configuration/indexing-service.md).
