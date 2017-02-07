@@ -64,6 +64,11 @@ Priority overrides: lowercase settings, e.g. `druid_host`, **always** override s
 
 Within the special variables, `DRUID_HOSTNAME` overrides `DRUID_USE_CONTAINER_IP`.
 
+### S3 Configuration
+Druid uses [jets3t](druid-s3-extensions) to store data segments in S3. These normally are configured by changing `jets3t.properties`. We enable override of any of the properties by setting an environment variable that begins with `s3_` followed by the name of the property, with `.` converted to `_`. The `s3_` prefix will be stripped off and all `_` converted to `.`.
+
+For example, if you want to override `s3service.s3-endpoint` to be `my.region.service.com`, set `s3_s3service_s3-endpoint=my.region.service.com`.
+
 ## Extensions
 By default, the following druid extensions are enabled:
 
@@ -87,7 +92,7 @@ Note that we do _not_ use the normal path of `druid_extensions_loadList` to over
 
 1. The default list is `druid.extensions.loadList=["druid-histogram", "druid-datasketches", "postgresql-metadata-storage", "druid-kafka-indexing-service"]`.
 2. Set `DRUID_EXTENSIONS=druid-my-indexer-service,druid-s3-extensions`
-3. Final list is `druid.extensions.loadList=["druid-my-indexer-service", "druid-s3-extensions"]`. 
+3. Final list is `druid.extensions.loadList=["druid-my-indexer-service", "druid-s3-extensions"]`.
 
 #### Add
 
