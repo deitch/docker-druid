@@ -46,17 +46,11 @@ if [[ -n "$DRUID_EXTENSIONS" ]]; then
   fi
 fi
 
-# catch all environment vars that start with druid_ and set them to override druid.
-druidVars=$(env | awk -F= '/^druid_/ {
+# catch all environment vars that start with property_ and set them to override.
+propVars=$(env | awk -F= '/^property_/ {
+    gsub("^property_","",$1)
     gsub("_",".",$1)
     print "-D"$1"="$2
 }')
 
-# catch all environment vars that start with s3_ and set them to override jets3t.
-jets3tVars=$(env | awk -F= '/^s3_/ {
-    gsub("^s3_","",$1)
-    gsub("_",".",$1)
-    print "-D"$1"="$2
-}')
-
-java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` ${druidVars} ${jets3tVars} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
+java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` ${propVars} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
