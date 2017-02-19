@@ -6,11 +6,12 @@ if [ "${1:0:1}" = '' ]; then
     set -- broker "$@"
 fi
 
-# load up an env file
+# 
+# we cannot load up an env file directly, since some properties are invalid, e.g. property_s3_http-port - bash will not accept the dash char as a var name
+# instead we will read only those props that are real (do not begin with property_), and load the rest later
 if [[ -e /druid.env ]]; then
-  . /druid.env
+  export $(grep -v '^property_' druid.env | grep -v '^\s*#')
 fi
-
 
 if [ "$DRUID_XMX" != "-" ]; then
     sed -ri 's/Xmx.*/Xmx'${DRUID_XMX}'/g' /opt/druid/conf/druid/$1/jvm.config
@@ -53,10 +54,19 @@ if [[ -n "$DRUID_EXTENSIONS" ]]; then
 fi
 
 # catch all environment vars that start with property_ and set them to override.
-propVars=$(env | awk -F= '/^property_/ {
+envVars=$(env | awk -F= '/^property_/ {
     gsub("^property_","",$1)
     gsub("_",".",$1)
     print "-D"$1"="$2
 }')
+if [[ -e /druid.env ]]; then
+  propVars=$(cat /druid.env | awk -F= '/^property_/ {
+      gsub("^property_","",$1)
+      gsub("_",".",$1)
+      print "-D"$1"="$2
+  }')
+fi
 
-java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` ${propVars} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
+
+
+java `cat /opt/druid/conf/druid/$1/jvm.config | xargs` ${envVars} ${propVars} -cp /opt/druid/conf/druid/_common:/opt/druid/conf/druid/$1:/opt/druid/lib/* io.druid.cli.Main server $@
