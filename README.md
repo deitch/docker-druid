@@ -67,9 +67,14 @@ Priority overrides: lowercase settings, e.g. `druid_host`, **always** override s
 Within the special variables, `DRUID_HOSTNAME` overrides `DRUID_USE_CONTAINER_IP`.
 
 ### S3 Configuration
-Druid uses [jets3t](druid-s3-extensions) to store data segments in S3. These normally are configured by changing `jets3t.properties`. You can override those properties using the `property_` environment variables described earlier. 
+Druid uses [jets3t](druid-s3-extensions) to store data segments in S3. These normally are configured by changing `jets3t.properties`. You can override those properties using the `property_` environment variables described earlier.
 
 For example, if you want to override `s3service.s3-endpoint` to be `my.region.service.com`, set `property_s3service_s3-endpoint=my.region.service.com`.
+
+## Env file
+Although the right way to do this is via environment _variables_, some container orchestration systems don't do such a great job loading up large numbers of environment variables. As such, if the file `/druid.env` exists, its contents will be read as a `.env` file before execution of druid.
+
+It can be done simply as `docker run -v $PWD/druid.env:/druid.env:ro ...`
 
 ## Extensions
 By default, the following druid extensions are enabled:

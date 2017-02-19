@@ -6,6 +6,12 @@ if [ "${1:0:1}" = '' ]; then
     set -- broker "$@"
 fi
 
+# load up an env file
+if [[ -e /druid.env ]]; then
+  . /druid.env
+fi
+
+
 if [ "$DRUID_XMX" != "-" ]; then
     sed -ri 's/Xmx.*/Xmx'${DRUID_XMX}'/g' /opt/druid/conf/druid/$1/jvm.config
 fi
