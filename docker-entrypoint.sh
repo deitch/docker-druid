@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e
 
+# are we running as debug?
+if [[ -n "$DEBUG" ]]; then
+ set -x
+fi
+
 # Run as broker if needed
 if [ "${1:0:1}" = '' ]; then
     set -- broker "$@"
