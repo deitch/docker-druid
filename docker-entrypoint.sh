@@ -4,6 +4,8 @@ set -e
 # are we running as debug?
 if [[ -n "$DEBUG" ]]; then
  set -x
+ sed -ri 's/WARN/DEBUG/g' /opt/druid/conf/druid/_common/log4j2.xml
+ sed -ri 's/warn/debug/g' /opt/druid/conf/druid/_common/log4j2.xml
 fi
 
 # Run as broker if needed
@@ -11,7 +13,7 @@ if [ "${1:0:1}" = '' ]; then
     set -- broker "$@"
 fi
 
-# 
+#
 # we cannot load up an env file directly, since some properties are invalid, e.g. property_s3_http-port - bash will not accept the dash char as a var name
 # instead we will read only those props that are real (do not begin with property_), and load the rest later
 if [[ -e /druid.env ]]; then
